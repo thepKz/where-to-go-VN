@@ -74,7 +74,7 @@ export default function BanDo() {
   }, [filtered, viewBounds, areaPins, cityAreas])
   const separate = !!areaSheetId
   const pins: MapPin[] = useMemo(() => [
-    ...areaPins,
+    ...areaPins.filter(pin => !viewBounds || (pin.lat >= viewBounds.south && pin.lat <= viewBounds.north && pin.lng >= viewBounds.west && pin.lng <= viewBounds.east)),
     ...(areaSheetId || !viewBounds ? visible : framePlaces).filter(place => areaSheetId || (!areaPins.some(pin => pin.areaId === place.areaId) && place.geo !== 'area')).map((place, index) => {
       if (areaSheetId && area) {
         const angle = (index + .5) * 2 * Math.PI / visible.length

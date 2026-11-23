@@ -66,6 +66,7 @@ export default function MapView({ pins, areaLabels = [], origin, fly, center, ci
   const centered = useRef(false)
   const [ready, setReady] = useState(false)
   const key = pins.map(pinSignature).join('|')
+  const stepZoom = useRef<(delta: number) => void>(() => {})
   const fitTo = (points: Point[]) => {
     const instance = map.current
     if (!instance || !points.length) return
@@ -77,13 +78,65 @@ export default function MapView({ pins, areaLabels = [], origin, fly, center, ci
     let alive = true
     const still = mini ? { dragging: true, touchZoom: false, scrollWheelZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false } : {}
     const bounds = latest.current.cityBounds
-    const instance = L.map(element, { zoomControl: false, attributionControl: false, center: [latest.current.cityCenter.lat, latest.current.cityCenter.lng], zoom: 15, minZoom: 11, maxZoom: 19, maxBounds: bounds ? L.latLngBounds([bounds.south, bounds.west], [bounds.north, bounds.east]) : undefined, maxBoundsViscosity: 0.8, inertiaDeceleration: 4000, inertiaMaxSpeed: 500, zoomSnap: 1, zoomAnimation: motion(), markerZoomAnimation: motion(), fadeAnimation: true, ...still })
-    const tiles = L.tileLayer(tileSource, { maxZoom: 19, keepBuffer: 3, updateWhenIdle: false })
+    const instance = L.map(element, { zoomControl: false, attributionControl: false, center: [latest.current.cityCenter.lat, latest.current.cityCenter.lng], zoom: 15, minZoom: 11, maxZoom: 19, maxBounds: bounds ? L.latLngBounds([bounds.south, bounds.west], [bounds.north, bounds.east]) : undefined, maxBoundsViscosity: 0.8, inertiaDeceleration: 4000, inertiaMaxSpeed: 500, zoomSnap: 1, touchZoom: true, scrollWheelZoom: false, wheelPxPerZoomLevel: 120, zoomAnimation: motion(), markerZoomAnimation: motion(), fadeAnimation: false, ...still })
+    class StreetTiles extends L.GridLayer {
+      protected createTile(coords: L.Coords, done: L.DoneCallback) {
+        const image = new Image(256, 256)
+        image.alt = ''
+        image.onload = () => done(undefined, image)
+        image.onerror = () => done(new Error('tile'), image)
+        image.src = L.Util.template(tileSource, coords)
+        return image
+      }
+    }
+    const tiles = new StreetTiles({ maxZoom: 19, keepBuffer: 3, updateWhenIdle: false })
     tiles.on('tileerror', () => { if (alive) latest.current.onTiles(false) })
     tiles.on('tileload', () => { if (alive) latest.current.onTiles(true) })
     tiles.addTo(instance)
+    const backing = L.layerGroup()
+    let retiring = 0
+    const restoreBacking = () => { clearTimeout(retiring); if (!mini) backing.addTo(instance) }
+    if (!mini) {
+      restoreBacking()
+      const level = 10, margin = instance.getSize().divideBy(4)
+      const limits = bounds ? L.latLngBounds([bounds.south,bounds.west],[bounds.north,bounds.east]) : instance.getBounds()
+      const first = instance.project(limits.getNorthWest(), level).subtract(margin).divideBy(256).floor()
+      const last = instance.project(limits.getSouthEast(), level).add(margin).divideBy(256).floor()
+      for (let x = first.x; x <= last.x; x++) for (let y = first.y; y <= last.y; y++) {
+        const corner = L.point(x, y).multiplyBy(256)
+        L.imageOverlay(L.Util.template(tileSource, {z: level, x, y}), L.latLngBounds(instance.unproject(corner, level), instance.unproject(corner.add([256,256]), level)), {pane:'tilePane', zIndex:0, className:'map-backing leaflet-tile'}).on('load', event => event.target.getElement().classList.add('leaflet-tile-loaded')).addTo(backing)
+      }
+      const retire = () => {
+        clearTimeout(retiring)
+        retiring = window.setTimeout(() => { if (!tiles.isLoading() && !element.querySelector('.leaflet-zoom-anim') && !element.classList.contains('leaflet-zoom-anim')) backing.remove() }, 80)
+      }
+      tiles.on('load', retire)
+      instance.on('moveend', retire)
+    }
+    let target: number | null = null
+    const advance = () => {
+      if (target === null) return
+      if (target === instance.getZoom()) target = null
+      else {
+        if (target < instance.getZoom()) restoreBacking()
+        instance.setZoom(target)
+      }
+    }
+    instance.on('zoomend', () => queueMicrotask(() => { if (alive) advance() }))
+    instance.on('dragstart touchstart', () => { target = null })
+    stepZoom.current = delta => {
+      const moving = target !== null
+      target = Math.min(instance.getMaxZoom(), Math.max(instance.getMinZoom(), (target ?? instance.getZoom()) + delta))
+      if (!moving) advance()
+    }
+    let lastWheel = -Infinity
+    const wheel = (event: WheelEvent) => {
+      event.preventDefault(); if (!event.deltaY || event.timeStamp - lastWheel < 40) return
+      lastWheel = event.timeStamp; stepZoom.current(-Math.sign(event.deltaY))
+    }
+    if (!mini) element.addEventListener('wheel', wheel, { passive: false })
     const cluster = L.markerClusterGroup({
-       showCoverageOnHover: false, animate: motion(), animateAddingMarkers: false, chunkedLoading: true, chunkInterval: 80, chunkDelay: 0, removeOutsideVisibleBounds: true, maxClusterRadius: mini ? 36 : innerWidth < 600 ? 34 : 30, spiderfyOnMaxZoom: true,
+       showCoverageOnHover: false, animate: false, animateAddingMarkers: false, chunkedLoading: false, chunkInterval: 80, chunkDelay: 0, removeOutsideVisibleBounds: true, maxClusterRadius: mini ? 36 : innerWidth < 600 ? 34 : 30, spiderfyOnMaxZoom: true,
       iconCreateFunction: item => L.divIcon({ className: 'map-cluster-wrap', html: `<span class="map-cluster ${markerPins.current.get((item.getAllChildMarkers()[0].options as L.MarkerOptions).title || '')?.group || 'an'}" style="--size:${item.getChildCount() < 5 ? 28 : item.getChildCount() < 15 ? 34 : 40}px" data-count="${item.getChildCount()}"><span aria-hidden="true"></span></span>`, iconSize: [44, 44], iconAnchor: [22, 22] }),
     })
     instance.addLayer(cluster)
@@ -99,38 +152,39 @@ export default function MapView({ pins, areaLabels = [], origin, fly, center, ci
     observer.observe(element, { childList: true, subtree: true })
     const resize = new ResizeObserver(() => { if (alive && element.isConnected) instance.invalidateSize() })
     resize.observe(element)
-    let pointerDown: { x: number; y: number; timer: number; moved: boolean } | null = null
-    const clearPointer = () => { if (pointerDown) window.clearTimeout(pointerDown.timer); pointerDown = null }
+    let pointerDown: { x: number; y: number; time: number; id: number } | null = null
+    const clearPointer = () => { pointerDown = null }
     const onPointerDown = (event: PointerEvent) => {
-      if (!latest.current.onPlace || event.button !== 0 || (event.target as HTMLElement).closest('.leaflet-control')) return
-      const frame = element.getBoundingClientRect()
-      if (event.clientX < frame.left || event.clientX > frame.right || event.clientY < frame.top || event.clientY > frame.bottom) return
-      const point = instance.containerPointToLatLng(L.point(event.clientX - frame.left, event.clientY - frame.top))
-      const start = { x: event.clientX, y: event.clientY }
-      const timer = window.setTimeout(() => {
-        if (!pointerDown || pointerDown.moved) return
-        longPressFired.current = true
-        window.setTimeout(() => { longPressFired.current = false }, 750)
-        centered.current = true
-        if (alive) latest.current.onPlace?.({ lat: point.lat, lng: point.lng })
-      }, 500)
-      pointerDown = { ...start, timer, moved: false }
+      clearPointer()
+      if ((!event.isPrimary && event.pointerType === 'touch') || event.shiftKey) restoreBacking()
+      if (event.isPrimary && event.button === 0 && latest.current.onPlace && !(event.target as HTMLElement).closest('.leaflet-control,.leaflet-marker-icon'))
+        pointerDown = {x:event.clientX, y:event.clientY, time:event.timeStamp, id:event.pointerId}
     }
     const onPointerMove = (event: PointerEvent) => {
-      if (!pointerDown) return
-      if (!isMapTap(pointerDown, { x: event.clientX, y: event.clientY })) { pointerDown.moved = true; window.clearTimeout(pointerDown.timer) }
+      if (pointerDown && !isMapTap(pointerDown, {x:event.clientX, y:event.clientY})) clearPointer()
     }
-    const onPointerUp = () => { clearPointer() }
+    const onPointerUp = (event: PointerEvent) => {
+      const start = pointerDown
+      clearPointer()
+      if (!start || event.pointerId !== start.id || event.timeStamp-start.time < 500 || !isMapTap(start,{x:event.clientX,y:event.clientY})) return
+      const point = instance.mouseEventToLatLng(event)
+      longPressFired.current = true
+      window.setTimeout(() => { longPressFired.current = false }, 750)
+      centered.current = true
+      latest.current.onPlace?.({lat:point.lat,lng:point.lng})
+    }
+    instance.on('dragstart zoomstart', clearPointer)
+    element.addEventListener('wheel', clearPointer, true)
     element.addEventListener('pointerdown', onPointerDown, true)
     element.addEventListener('pointermove', onPointerMove, true)
     element.addEventListener('pointerup', onPointerUp, true)
-    element.addEventListener('pointercancel', onPointerUp, true)
+    element.addEventListener('pointercancel', clearPointer, true)
     const offline = () => latest.current.onTiles(false)
     addEventListener('offline', offline)
     if (!navigator.onLine) offline()
     map.current = instance; group.current = cluster; setReady(true)
     return () => {
-      reduced.removeEventListener('change', syncInertia); alive = false; removeEventListener('offline', offline); resize.disconnect(); observer.disconnect(); element.removeEventListener('pointerdown', onPointerDown, true); element.removeEventListener('pointermove', onPointerMove, true); element.removeEventListener('pointerup', onPointerUp, true); element.removeEventListener('pointercancel', onPointerUp, true); clearPointer()
+      clearTimeout(retiring); element.removeEventListener('wheel', wheel); element.removeEventListener('wheel', clearPointer, true); reduced.removeEventListener('change', syncInertia); alive = false; removeEventListener('offline', offline); resize.disconnect(); observer.disconnect(); element.removeEventListener('pointerdown', onPointerDown, true); element.removeEventListener('pointermove', onPointerMove, true); element.removeEventListener('pointerup', onPointerUp, true); element.removeEventListener('pointercancel', clearPointer, true); clearPointer()
       try { here.current?.remove(); instance.stop(); instance.remove() } catch {}
       map.current = null; group.current = null; markers.current.clear(); markerPins.current.clear(); hiddenAreaPlaces.current.clear(); hiddenAreaPins.current.clear(); collapsedAreaPins.current.clear(); here.current = null
     }
@@ -297,7 +351,7 @@ export default function MapView({ pins, areaLabels = [], origin, fly, center, ci
     syncAreaPlaces()
     rafId = requestAnimationFrame(() => { if (alive && host.current?.isConnected) { syncAreaPins(); reportView() } })
     const { origin: home, center: area, fit: frame } = latest.current
-    if (!area && frame?.points.length) { centered.current = true; fitTo(frame.points) }
+    if (!centered.current && !area && frame?.points.length) { centered.current = true; fitTo(frame.points) }
     // Có vị trí và không đang xem một khu thì mở quanh vị trí đó, không thu cả thành phố vào khung.
     if (!area && home) { if (!centered.current) { centered.current = true; instance.setView([home.lat, home.lng], 15) } }
     
@@ -417,8 +471,8 @@ export default function MapView({ pins, areaLabels = [], origin, fly, center, ci
     {!mini && <div ref={labelHost} className="map-label-layer" aria-hidden="true" />}
     {!mini && <a className="map-credit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">{copy.mapFields.credit}</a>}
     {!mini && <div className="map-zoom">
-      <button type="button" className="button map-tool" data-action="zoom-in" aria-label="Phóng to" onClick={() => map.current?.zoomIn()}><PlusIcon /></button>
-      <button type="button" className="button map-tool" data-action="zoom-out" aria-label="Thu nhỏ" onClick={() => map.current?.zoomOut()}><MinusIcon /></button>
+      <button type="button" className="button map-tool" data-action="zoom-in" aria-label="Phóng to" onClick={() => stepZoom.current(1)}><PlusIcon /></button>
+      <button type="button" className="button map-tool" data-action="zoom-out" aria-label="Thu nhỏ" onClick={() => stepZoom.current(-1)}><MinusIcon /></button>
     </div>}
   </div>
 }
