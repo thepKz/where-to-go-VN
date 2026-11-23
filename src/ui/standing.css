@@ -1,0 +1,5 @@
+.standing{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:8px;border-radius:var(--radius-small);background:#fff;box-shadow:inset 0 0 0 1px var(--line)}
+.standing-text{flex:1 1 200px;display:flex;align-items:center;gap:8px;min-width:0;padding:0 8px;overflow-wrap:normal;word-break:normal}
+.standing-text .icon{width:20px;height:20px}
+.standing-actions{flex:1 1 220px;display:flex;gap:8px}
+.standing-actions .button{flex:1;min-height:44px;padding:8px 12px;font-weight:600}

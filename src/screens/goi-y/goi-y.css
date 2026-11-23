@@ -1,0 +1,110 @@
+/* Tình trạng mở cửa dùng chung ở thẻ, hàng và tấm */
+.open-status{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;line-height:1.6}
+.open-status.is-unknown{font-weight:400}
+.suggestion-open{display:flex}
+/* Món, giá, địa chỉ của chỗ không có câu vì sao */
+.place-lines{display:grid;gap:8px}
+.place-line{display:flex;align-items:flex-start;gap:8px;overflow-wrap:anywhere}
+.place-line .icon{width:20px;height:20px;margin-top:2px}
+.place-line>span{min-width:0;flex:1}
+
+/* Dòng trạng thái người kia và dấu người kia đã thích */
+.other-status{display:flex;align-items:center;gap:8px;font-size:13px;margin:-8px 0 16px}
+.liked-by .icon{color:var(--son);fill:var(--son)}
+.liked-by>span{overflow-wrap:anywhere}
+.suggestion .badges{min-height:0}
+
+/* Bộ thẻ: hiện mép các thẻ còn lại phía sau thẻ đang xem */
+.pager{align-items:center;gap:12px}
+.pager-dots{display:flex;gap:8px}
+.pager-dots span{height:8px;width:8px;background:var(--line);border-radius:var(--radius-round)}
+.pager-dots .active{background:var(--son)}
+.suggestions .pager span.small{font-size:13px}
+
+/* Màn kết quả: một chỗ đứng đầu, các chỗ khác đủ thông tin để so */
+.results{max-width:none;margin:0}
+.results-body{display:grid;gap:0;align-content:start}
+.results-grid{display:grid;gap:16px;align-content:start}
+.result{display:grid;gap:12px;justify-items:start;align-content:start;padding:20px}
+.result-copy{display:grid;gap:8px;min-width:0;width:100%}
+.result .badges{margin:4px 0}
+.result-name{display:flex;align-items:center;min-height:44px;max-width:100%}
+.result-name h2{overflow-wrap:normal;word-break:normal}
+.result>.button{margin-top:8px;width:100%}
+.results-actions{display:grid;gap:12px;margin-top:16px}
+.chosen{display:grid;gap:12px;justify-items:start;padding:24px}
+.chosen-mark{display:grid;place-items:center;width:48px;height:48px;border-radius:var(--radius-round);background:var(--wash);color:var(--son)}
+.chosen-name{display:flex;align-items:center;min-height:44px}
+.chosen-name h2{font-size:24px;overflow-wrap:normal;word-break:normal}
+.chosen-actions{display:grid;gap:12px;width:100%;margin-top:12px}
+.chosen-actions .primary{min-height:56px}
+
+@media (max-height:639px){
+ .results .screen-title{margin:0 0 8px}
+ .suggestion-art{display:none}
+ .suggestion-body{padding:12px;gap:8px}
+ .suggestion-body .place-lines{gap:4px}
+ .suggestion-body .place-line{gap:4px}
+ .suggestion-body .place-line .icon{width:16px;height:16px;margin-top:0}
+ .suggestion-body h2{font-size:18px;line-height:28px}
+ .suggestion-body .pair{margin-top:0}
+ .suggestion .badges{display:none}
+ .other-status{margin:-4px 0 8px}
+ .result,.chosen{padding:12px;gap:8px}
+ .result>.button{margin-top:0}
+ .chosen-mark{width:36px;height:36px}
+ .chosen-actions{grid-template-columns:1fr 1fr;gap:8px;margin-top:0}
+ .chosen-actions .primary{min-height:44px}
+}
+@media (max-width:399px){
+ .chosen-actions{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .chosen-actions .button{min-width:0;white-space:nowrap;overflow-wrap:normal}
+}
+
+@media (max-width:599px){.chosen-actions{grid-template-columns:1fr}.chosen-actions .button{width:100%}}
+
+@media (max-width:599px), (max-height:639px){
+ .result{gap:8px;padding:12px}
+ .result>.button{margin-top:0;min-height:44px;padding:8px 12px}
+ .result>.badges{margin:0;min-height:0}
+ .results-grid{gap:4px}
+ .results .screen-title{margin-bottom:4px}
+ .results-body>.other-status{margin:-4px 0 4px}
+}
+
+@media (min-width:600px) and (max-height:639px){
+  .results-grid{grid-template-columns:1fr;gap:8px}
+  .result{grid-template-columns:minmax(0,1fr) auto;min-width:0;padding:12px;gap:8px;align-items:center}
+  .result-copy{gap:4px}
+  .result .place-row-meta{line-height:16px}
+  .result-name{min-height:44px}
+  .result>.button{grid-column:2;grid-row:1;padding:8px 12px;width:auto;min-width:112px}
+  .result .suggestion-why,.result .place-lines,.result .badges{display:none}
+  .result .place-row-meta{flex-wrap:nowrap;gap:0 8px;overflow:hidden}
+  .result .place-row-meta [data-place-field="price"],.result .place-row-meta [data-place-field="hours"],.result .place-row-meta [data-hours-unknown]{display:none}
+}
+@media (max-width:599px) and (max-height:640px){
+ .results-grid .result:not(:first-child){display:none}
+}
+
+@media (min-width:1024px) and (min-height:640px){
+ .results-grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;align-items:start;width:100%}
+ .results-actions{width:320px;margin:24px 0 0}
+ .results .screen-title{margin:32px 0 24px;justify-content:flex-start}
+ .results-body{justify-items:stretch}
+ .results-body>.other-status{margin:0 0 16px}
+ .chosen{max-width:560px;padding:32px}
+ .results.two-col{display:grid;grid-template-columns:minmax(0,1fr) 480px;column-gap:48px;align-items:start;align-content:start}
+ .results.two-col>*{grid-column:1}
+ .results.two-col>.results-aside{grid-column:2;grid-row:1 / span 6;display:grid;gap:24px;margin-top:32px;align-content:start;align-self:start;position:sticky;top:calc(var(--top-h) + 8px)}
+ .suggestion-art{height:72px}
+ .suggestion-art .icon{height:40px;width:40px}
+ .suggestion-body{padding:24px;gap:12px}
+}
+@media not all and (min-width:1024px) and (min-height:640px){
+ .suggestion.active{box-shadow:0 8px 0 -4px #fffffff2,0 9px 0 -4px var(--line),0 16px 0 -8px #fffffff2,0 17px 0 -8px var(--line)}
+ .suggestions{padding-bottom:24px}
+ .suggestion.active .suggestion-body{flex:1}
+}
+@media (min-width:600px) and (max-height:639px){.chosen-actions .button:last-child{grid-column:1 / -1}}
+.cap::first-letter{text-transform:uppercase}

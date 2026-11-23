@@ -1,0 +1,26 @@
+.mine{display:grid;gap:24px;max-width:640px;margin:0 auto;padding-top:8px}
+@media (min-width:1024px) and (min-height:640px){.mine{padding-top:24px}}
+.mine-head{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.mine-body{display:grid;gap:16px;align-content:start}
+.mine-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;border-radius:var(--radius-small);background:#eaeceb}
+.mine-tabs button{min-height:48px;padding:8px;border-radius:var(--radius-small);background:transparent;font-weight:400;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:4px}
+.tab-count{font-size:13px;min-width:16px;height:24px;text-align:center;border-radius:var(--radius-small);background:var(--wash);padding:0 4px}
+.mine-tabs button[aria-selected=true]{background:white;font-weight:600}
+.mine-list{padding:8px 24px}
+.mine-empty{display:grid;gap:16px}
+.add-form{display:grid;gap:16px}
+.add-form .field{display:grid;gap:4px}
+.add-form .field>span{font-size:15px}
+.mine-rows{display:grid}
+.add-form .group-pick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.add-form .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(min-width:560px){.add-form .group-pick{grid-template-columns:repeat(4,minmax(0,1fr))}.add-form .group-pick .chip{padding:8px}}
+@media (min-width:1024px) and (min-height:640px){
+  .mine{max-width:none;margin:0;grid-template-columns:352px minmax(0,1fr);align-items:start;column-gap:48px}
+  .mine-list{padding:12px 28px}
+  .mine-head{grid-column:1 / -1}
+  .mine-tabs button[aria-selected=true]{background:var(--wash)}
+}
+@media (max-height:639px){.mine{gap:8px;padding-top:0}.mine-body{gap:8px}.mine .empty-state{padding:16px;gap:12px}.mine-head .button{min-height:44px;padding:8px 12px}}
+@media (max-width:599px){.mine-tabs button{padding:8px;font-size:13px;gap:4px}}
+@media (max-width:359px){.mine-tabs{grid-template-columns:1fr;gap:4px}.mine-tabs button{justify-content:space-between;font-size:15px}}

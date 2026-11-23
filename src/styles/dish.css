@@ -1,0 +1,81 @@
+
+.app-shell .dish-card.place-row{position:relative;display:flex;min-width:0;padding:0;margin:0 0 8px;border:1px solid var(--line);border-radius:var(--radius-small);background:white;box-shadow:0 2px 4px #18181b0b;transition:border-color .15s,transform .12s}
+.app-shell .dish-card:hover{border-color:#a1a1aa}.dish-card:active{transform:scale(.98)}
+.app-shell .dish-card .place-row-link{display:flex;align-items:center;gap:10px;min-width:0;padding:8px 12px;min-height:60px}.app-shell .dish-card .group-icon{display:grid;width:40px;height:40px;border-radius:var(--radius-small);color:var(--son)}.dish-card .group-icon.ca-phe{color:#7a4a24}.dish-card .group-icon.nhau{color:#93370d}.dish-card .group-icon.choi{color:#2d31a6}
+.dish-card .place-row-text{display:grid;gap:2px;min-width:0}.app-shell .dish-card .place-row-text>strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px;line-height:20px;font-weight:600}.dish-meta{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:13px;line-height:18px;min-height:18px}.dish-meta>span:first-child{overflow:hidden;text-overflow:ellipsis}.dish-meta [data-distance]{display:inline-flex;align-items:center;gap:3px}.dish-meta .icon{width:12px;height:12px}.dish-meta [data-place-field=hours]{margin-left:auto;padding:0 6px;border-radius:var(--radius-small)}.hours-open{color:#067647;background:#dcfae6}.hours-closed{background:var(--paper)}.dish-extra{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.dish-group h2{display:flex;align-items:center;gap:8px;font-size:15px;line-height:24px;margin:8px 0 4px;white-space:nowrap}.dish-group small{font-size:13px;background:white;border:1px solid var(--line);border-radius:var(--radius-panel);padding:0 8px}.dish-group>.button{font-size:15px}.dish-expand{display:grid;grid-template-rows:0fr;transition:grid-template-rows .2s}.dish-expand[data-open=true]{grid-template-rows:1fr}.dish-expand>div{overflow:hidden;min-height:0}
+.gd-layout .gd-hot{display:block}.gd-layout .gd-hot h2{font-size:15px}.gd-layout .gd-hot-list{display:flex;max-height:none;scroll-snap-type:none;padding:4px 0}.gd-hot-list>.dish-card{flex:0 0 min(314px,85%);margin:0}.gd-groups .chip:before{content:'';width:8px;height:8px;border-radius:var(--radius-round);background:var(--son)}.gd-groups [data-group=ca-phe]:before{background:#7a4a24}.gd-groups [data-group=nhau]:before{background:#93370d}.gd-groups [data-group=choi]:before{background:#2d31a6}.top a,.top button,.gd-controls button{font-size:15px;white-space:nowrap}
+@keyframes dish-in{from{opacity:0;transform:translateY(8px)}}@keyframes dish-fade{from{opacity:.25}}.dish-group>.dish-card{animation:dish-in 150ms both}.dish-group>.dish-card:nth-child(3){animation-delay:30ms}.dish-group>.dish-card:nth-child(4){animation-delay:60ms}.screen-transition{animation:dish-in 180ms both}.screen-transition:has([data-screen=chi-tiet]){animation-duration:220ms}@media(prefers-reduced-motion:reduce){.app-shell .dish-card,.app-shell .screen-transition,.app-shell .swap{transform:none;animation-name:dish-fade}.dish-expand{transition:none}.dish-card:active{transform:none}}
+.top .nav a{font-weight:600}
+.gd-layout .gd-groups{display:flex;justify-content:space-between;gap:12px}
+.gd-groups .chip{flex:0 0 auto;width:auto;gap:4px}
+.gd-groups .chip:before{flex:none}
+.app-shell .area-sheet-list .dish-card .place-row-link{min-height:44px;padding:2px 8px}
+@media(min-width:600px) and (max-height:499px){
+ .gd-layout .gd-hot-list{flex-direction:column;overflow-x:auto;flex-wrap:wrap;height:124px;align-content:flex-start;gap:4px}
+ .gd-layout .gd-hot-list>.dish-card{flex:none;width:100%;margin:0}
+ .gd-hot-list .dish-card .place-row-link{min-height:48px;padding:3px 8px}
+}
+.gd-area-copy>strong{white-space:normal;overflow:visible;overflow-wrap:anywhere}.gd-area-count{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gd-area{min-width:0;border:1px solid var(--line)}
+ .dish-card .place-row-text{container-type:inline-size;grid-template-columns:minmax(0,1fr)}
+.dish-meta>[data-distance],.dish-meta>[data-place-field=hours]{flex:none}
+@container (max-width:172px){
+ .dish-meta [data-place-field=hours]{position:relative;width:8px;height:8px;padding:0;background:#067647}
+ .dish-meta .hours-closed[data-place-field=hours]{background:#71717a}
+ .dish-meta [data-place-field=hours]>span{position:absolute;inset:0;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+}
+.gd-area-count{min-width:0}.gd-area-names{display:block}.gd-area-count br{display:none}
+.top .brand{font-size:18px}
+
+@media (min-width:600px) and (max-width:899px){
+ .top{gap:4px}.top .nav a,.top .house-link,.top .city-switch{padding-inline:8px;gap:4px}
+}
+@media (min-width:600px) and (max-width:899px) and (min-height:500px){
+ .gd-layout .gd-groups{flex-wrap:wrap;justify-content:flex-start;gap:4px 8px}
+}
+
+.gd-hot-list .dish-meta{flex-flow:row-reverse wrap;justify-content:flex-end;align-content:flex-start;height:18px;overflow:hidden}
+.gd-hot-list .dish-meta>[data-place-field=hours]{order:-2;margin-left:0}
+.gd-hot-list .dish-meta>[data-distance]{order:-1}
+.gd-hot-list .dish-meta>:is([data-place-field=kind],[data-place-field=dishes]){flex:none;overflow:visible;text-overflow:clip}
+.gd-hot-list .dish-meta>:is([data-place-field=kind],[data-place-field=dishes]):only-child{max-width:100%;white-space:normal;line-height:18px}
+
+:root{--paper:#fffefa;--line:#96969f}
+.top,.gd-controls{border-bottom:1px solid var(--line)}
+.app-shell .group-icon,.app-shell .gd-area-icon{background:transparent}
+.app-shell .group-icon svg{stroke-width:2}
+.app-shell .group-icon.ca-phe{color:#734521}.app-shell .group-icon.nhau{color:#83340e}.app-shell .group-icon.choi{color:#383292}
+.app-shell .dish-card .group-icon{width:24px;height:24px;flex:none}
+.app-shell .dish-card .place-row-link{min-height:48px;padding:4px 12px}
+.dish-group{border-top:1px solid var(--line)}.dish-group small{background:none;border:0;padding:0;font-weight:400}
+.app-shell .dish-meta [data-place-field=hours]{display:inline-flex;align-items:center;gap:4px;background:transparent;padding:0;color:var(--ink)}
+.app-shell .dish-meta .hours-open[data-place-field=hours]{color:#08643e}
+.dish-meta [data-place-field=hours]:before{content:'';background:currentColor;width:6px;height:6px;border-radius:var(--radius-round)}
+.gd-list .gd-hot-list{display:grid;grid-template-columns:minmax(0,1fr);height:auto;overflow:visible;gap:0;padding:0}
+.gd-list .gd-hot-list>.dish-card{width:auto;margin:0 0 8px}.gd-list .gd-hot h2{margin:0 0 4px;line-height:22px}
+@media(min-width:1024px) and (min-height:640px){.gd-list .gd-hot-list,.gd-list .dish-group{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px}.dish-group>:not(.dish-card){grid-column:1/-1}}
+@media(max-width:699px),(max-height:499px){:root{--top-h:44px}.top{height:44px;min-height:44px}.app-shell .gd-layout{display:flex;flex-direction:column;align-items:stretch;height:calc(100dvh - 44px - var(--nav-space));gap:0}.app-shell .gd-controls{display:flex;align-items:center;gap:4px;flex:none}.gd-layout .gd-groups{gap:0;flex-wrap:nowrap}.app-shell .gd-controls .gd-standing{min-width:24px;flex:1}.gd-controls .gd-standing-label{font-size:13px}.gd-controls .gd-cuisine-trigger{display:inline-flex;width:32px;justify-content:center}.gd-controls .gd-filter-label,.gd-controls .gd-actions svg{display:none}.gd-controls .chip{font-size:13px;padding-inline:4px}.gd-controls .button{font-size:13px;padding-inline:8px}.gd-layout .gd-results{display:flex;flex:1;min-height:0}.gd-results .gd-list{height:auto;flex:1;overflow:auto}.gd-layout .recent-map-column{display:none}.gd-layout .gd-hot{padding:0}.gd-hot-list .dish-card .place-row-link{height:auto}.app-shell .gd-list{padding-top:4px}}
+
+.gd-list .gd-hot-list .dish-meta{flex-flow:row nowrap;justify-content:flex-start}.gd-list .gd-hot-list .dish-meta>*{order:0}.gd-list .gd-hot-list .dish-meta>[data-place-field=hours]{margin-left:auto}.gd-list .gd-hot-list .dish-meta>:first-child{flex:0 1 auto;min-width:0}
+.gd-controls .gd-groups .chip:before{display:none}.gd-controls .gd-groups .chip[aria-pressed=true]{box-shadow:inset 0 -2px currentColor;border-radius:0}.map-screen .map-side{background:var(--paper)}
+@media(max-width:699px),(max-height:499px){.gd-layout .gd-groups{margin-right:auto}.app-shell .gd-controls .gd-standing{flex:0 1 auto}.gd-layout .gd-groups .chip{padding-inline:8px}.app-shell .gd-layout{height:calc(100dvh - 44px - var(--nav-space))}}
+@media(min-width:600px) and (max-height:499px){.app-shell .gd-layout{height:calc(100dvh - 48px)}}
+@media(min-width:600px) and (max-height:639px){.top .nav{padding:0}}
+@media(max-width:699px),(max-height:499px){.top{border-bottom:0;box-shadow:inset 0 -1px var(--line);padding-bottom:0}}
+@media(max-width:479px){.gd-controls .gd-standing-label{display:none}.gd-controls .gd-standing svg{width:18px}}
+
+@media(max-height:499px){.detail{display:flex;flex-direction:column}.detail>.detail-hot,.detail>.badges{order:2}.detail-grid{gap:4px}.detail .detail-grid>.detail-actions{gap:4px}}
+
+.gd-controls .gd-cuisine-trigger .icon{display:block}.gd-hot h2 small{font-weight:400;font-size:13px}.app-shell .group-icon.an{color:#a3291c}
+
+/* Vòng hai (dd-gd-56): chuyển cảnh trang chi tiết chỉ mờ dần, không dịch chuyển, để nút Chốt dính đáy không lệch chỗ lúc đang chuyển. */
+.screen-transition:has([data-screen=chi-tiet]){animation-name:dish-fade}
+/* Khung điện thoại hẹp: hàng điều khiển vừa 320 (nhóm món đệm 4), thẻ Hôm nay một dòng chữ. */
+@media(max-width:359px){.gd-layout .gd-groups .chip{padding-inline:4px}.app-shell .gd-controls .gd-cuisine-trigger{flex:none}}
+@media(max-width:599px){.app-shell .gd-layout .today-card-copy{display:flex;flex-wrap:nowrap;gap:8px;min-width:0}.gd-layout .today-card-copy>strong{flex:none}.gd-layout .today-card-copy>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+/* Khung thấp và hẹp: nút cùng hàng điều khiển cao đều 44. */
+@media(max-width:699px),(max-height:499px){.app-shell .gd-controls .gd-standing,.app-shell .gd-controls .gd-cuisine-trigger{min-height:44px;height:44px}}
+
+/* Vòng ba (dd-gd-56): khung thấp (cao dưới 500), thẻ Hôm nay là hàng một dòng đầu tiên trong danh sách cuộn, viền và biểu tượng, không nền hồng (điểm 109d). */
+@media(max-height:499px){.gd-list .today-card.today-low{display:flex;align-items:center;gap:8px;padding:4px 8px;margin:0 0 8px;background:white;border:1px solid var(--line);border-radius:var(--radius-small);box-shadow:0 2px 4px #18181b0b}.gd-list .today-low .today-card-copy{flex:1;min-width:0;display:flex;flex-wrap:nowrap;gap:8px}.gd-list .today-low .today-card-copy>strong{flex:none;color:var(--son)}.gd-list .today-low .today-card-copy>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.gd-list .today-low .today-card-actions{flex:none;flex-wrap:nowrap;gap:4px}}
+@media(max-height:499px){.app-shell .gd-list:has(.today-low){padding-top:0}.gd-list .today-card.today-low{padding-block:0;margin-bottom:4px}.gd-list:has(.today-low) .gd-hot h2{margin:0;line-height:20px}.gd-list .today-low .today-card-actions .button{min-height:44px;padding-block:0}}

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env*
+!.env.example
+.vercel/
+# Gốc kho có dòng "data/" loại mọi thư mục tên data. Dữ liệu chỗ đóng gói cho Vercel nằm ở public/data nên phải giữ lại.
+!/public/data/
+dist-nha/

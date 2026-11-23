@@ -1,0 +1,91 @@
+.gan-day{max-width:1120px;margin:auto;padding-top:4px}
+.gd-layout,.gd-controls{display:grid;align-items:start;min-width:0;gap:8px}
+.gd-results{display:contents}
+.gd-controls{grid-area:controls;align-items:center;grid-template-columns:minmax(0,1fr) auto}
+.gd-standing{grid-area:standing;justify-self:start;max-width:100%;padding-inline:0;background:none}
+.gd-standing>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:24px;text-align:left}.gd-place-main strong,.gd-hot-card strong,.gd-area-copy>strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gd-controls .gd-standing.button{justify-self:stretch;padding-inline:8px}.gd-standing-label{flex:1}.gd-list{scrollbar-width:thin}.gd-cuisine-trigger.button{max-width:100%;overflow:hidden}.gd-filter-label{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.gd-standing-label{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gd-list .gd-place-meta-line{align-items:baseline}
+.gd-groups{grid-area:groups;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.gd-groups .chip,.gd-cuisine-trigger,.gd-standing.button{min-width:0;min-height:44px;border:0;background:transparent;box-shadow:none;padding-inline:4px;white-space:nowrap}
+.gd-groups .chip{border-radius:0}
+.gd-groups .chip[aria-pressed=true]{color:var(--son);box-shadow:inset 0 -2px var(--son)}
+.gd-cuisine-trigger{grid-area:cuisine;justify-self:start}
+.gd-actions{grid-area:help}
+.gd-actions .button{min-height:44px;white-space:nowrap}
+.gd-hot{grid-area:hot;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;min-width:0;gap:4px}
+.gd-hot h2{display:flex;align-items:center;gap:4px;margin:0;font-size:15px}
+.gd-hot h2 .icon{color:var(--son)}
+.gd-hot-nav{grid-row:1;display:grid;place-items:center;min-width:44px;min-height:44px;border:0;background:transparent}
+.gd-hot-prev{grid-column:2}.gd-hot-next{grid-column:3}.gd-hot-prev .icon{transform:rotate(180deg)}
+.gd-hot-list{grid-column:1/-1;display:flex;gap:8px;min-width:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.gd-hot-card{flex:0 0 160px;grid-template-columns:minmax(0,1fr);display:grid;align-content:center;min-width:0;padding:8px;background:white;border-radius:var(--radius-small);scroll-snap-align:start;font-size:13px;line-height:17px}
+.gd-hot-meta{display:flex;flex-wrap:wrap;column-gap:8px}
+.gd-list{grid-area:list;min-width:0}
+.gd-place-main{display:grid;align-content:center;min-height:44px;padding:6px 0;border-bottom:1px solid var(--line)}
+.gd-place-main strong{font-size:15px;line-height:20px;white-space:nowrap}
+.gd-place-meta{display:grid;font-size:13px;line-height:18px}
+.gd-place-meta-line{display:flex;flex-wrap:wrap;gap:0 8px;min-width:0}
+.gd-place-meta-line>span{min-width:0;white-space:nowrap}.gd-place-meta-line>[data-place-field="price"],.gd-place-meta-line>[data-place-field="hours"]{white-space:nowrap}
+.gd-area{display:flex;align-items:center;gap:8px;min-height:48px;padding:4px 8px;background:white;border-radius:var(--radius-small)}
+.gd-area-copy>strong{white-space:normal;overflow:visible}.gd-area-icon{color:var(--son)}.gd-area-copy{display:grid;min-width:0;flex:1}.gd-area-count,.gd-area-distance{font-size:13px}
+.gd-more,.gd-help-sheet,.gd-area-list,.today-card{display:grid;gap:8px}
+.gd-area-list .button,.gd-help-sheet .button{justify-content:flex-start;text-align:left}
+.gd-cuisines,.gd-cuisine-sheet,.today-card-actions{position:relative;display:flex;gap:8px;flex-wrap:wrap}
+.gd-cuisine-measure{position:absolute;visibility:hidden;display:flex;inset:0;overflow:hidden;pointer-events:none}
+.today-card{grid-area:today;padding:8px;background:var(--wash)}.today-card-copy{display:grid}
+.recent-map-column{grid-area:map;min-width:0;min-height:0;height:100%}.recent-mini-map{height:100%;min-width:0;min-height:0}.recent-mini-map .map-frame{height:100%}
+@media (width < 600px){
+ .recent-map-column{display:none}
+ .gd-layout{grid-template-areas:"today today today" "standing cuisine help" "groups groups groups" "hot hot hot" "list list list";grid-template-columns:minmax(0,1fr) auto auto;grid-template-rows:auto auto auto auto minmax(55.1dvh,1fr);gap:0 4px;height:calc(100dvh - var(--top-h) - var(--nav-space) - 4px)}
+ .today-card{align-self:start;padding:4px;gap:4px}
+ .today-card-actions{gap:4px}
+ .today-card-actions .button{min-height:44px;padding-block:4px}
+ .app-shell:has(.gan-day){padding-inline:8px}
+ .gd-controls{display:contents}
+ .gd-controls .gd-standing.button{padding-inline:0;gap:0}.gd-standing .icon{width:12px}.gd-actions .button .icon{display:none}
+ .gd-cuisine-trigger .icon{display:none}
+ .gd-cuisine-trigger.button{max-width:96px}
+ .gd-groups{gap:12px}
+ .gd-groups .chip{width:100%;min-height:44px;padding:4px 0;font-size:13px;gap:0;justify-content:center}.gd-groups .chip .icon{display:none}
+ .gd-actions .button,.gd-standing.button,.gd-cuisine-trigger.button{height:44px;min-height:44px;padding-block:4px}
+ .gd-actions{align-self:center;justify-self:end}.gd-actions .button{padding-inline:8px}.gd-hot{grid-template-columns:minmax(0,1fr);align-self:start;gap:0;padding-top:0}.gd-hot h2{font-size:13px;max-width:none;white-space:nowrap}.gd-hot h2 .icon{display:none}.gd-hot h2{grid-column:1;grid-row:1}.gd-hot-list{grid-column:2;grid-row:1}.gd-layout .gd-hot{grid-template-columns:auto minmax(0,1fr);column-gap:8px}
+ .gd-list{align-self:stretch;min-height:0;overflow:auto;padding-bottom:8px}
+ .gd-hot-nav{display:none}
+ .gd-hot-list{max-height:48px;overflow-x:auto}
+ .gd-hot-card{min-height:44px;padding:4px}
+}
+@media (width >= 600px) and (height < 500px){
+ .gd-layout{grid-template-columns:minmax(0,45%) minmax(0,1fr);grid-template-areas:"controls list" "today list" "hot list";grid-template-rows:auto auto 1fr;column-gap:16px}
+ .recent-map-column{display:none}
+ .gan-day{padding-top:0}
+ .gd-hot-nav{height:44px}
+ .sheet[data-sheet="cho-dung"] .scroll-area{max-height:calc(100dvh - 72px)}
+ .gd-area-list{display:grid;grid-template-columns:1fr 1fr;gap:4px}.gd-area-list input{grid-column:1/-1}
+ .gd-layout .today-card{padding:4px;gap:4px}
+ .today-card-actions .button{padding:4px 8px;min-height:44px}
+ .today-card-copy{display:flex;flex-wrap:wrap;gap:4px}
+ .gd-actions .button,.gd-cuisine-trigger.button{padding-inline:8px}
+ .gd-groups .chip{padding-inline:0;white-space:nowrap}
+ .gd-controls{grid-template-areas:"standing standing" "groups groups" "cuisine help";row-gap:0}
+ .gd-list{height:calc(100dvh - var(--top-h) - 12px);overflow:auto}
+ .gd-place-meta-line{flex-wrap:wrap}
+
+}
+@media (width >= 600px) and (height >= 500px){
+ .gd-list{align-self:stretch;min-height:0;overflow:auto}
+ .gan-day{position:relative;height:calc(100dvh - var(--top-h) - 8px)}
+ .gd-layout{height:100%;grid-template-columns:minmax(220px,32%) minmax(0,1fr);grid-template-areas:"today results" "controls results" "map results";grid-template-rows:auto auto minmax(0,1fr);column-gap:24px}
+ .gd-results{grid-area:results;display:flex;flex-direction:column;gap:16px;min-height:0;height:100%}.gd-results .gd-list{flex:1}
+ .gd-controls{grid-template-areas:"standing cuisine" "groups groups" "help help"}
+ .recent-map-column{position:relative;align-self:stretch}
+ .gan-day .recent-map-column .recent-mini-map{height:100%;min-height:0}
+ .today-card-copy{display:flex;flex-wrap:wrap;gap:0 8px}
+ .today-card-actions{gap:4px;flex-wrap:nowrap}
+ .today-card-actions .button{padding-inline:8px}
+ .gd-actions .button{width:100%}
+
+}
+
+.gd-layout:has(.today-card) .gd-actions .button{color:var(--son);background:white}
